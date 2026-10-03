@@ -1,0 +1,20 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Public, non-sensitive mirror used only for complaint tracking and counters.
+    match /ComplaintPublic/{complaintId} {
+      allow read: if true;
+      allow create: if request.resource.data.complaintID == complaintId
+                    && request.resource.data.status == "Pending";
+      allow update, delete: if request.auth != null;
+    }
+
+    // Full complaint record. Citizens can create; only authenticated admins can read/list/update/delete.
+    match /Complaints/{complaintId} {
+      allow create: if request.resource.data.complaintID == complaintId
+                    && request.resource.data.status == "Pending";
+      allow get, list, update, delete: if request.auth != null;
+    }
+  }
+}

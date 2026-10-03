@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="लोक साथी — नागरिक समस्याओं की शिकायत और ट्रैकिंग सेवा">
+<title>लोक साथी | आपकी आवाज़</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <div class="nav">
+
+    <a class="logo" href="#home">
+      <img src="logo1.jpg" alt="लोक साथी लोगो">
+      <span>लोक साथी</span>
+    </a>
+
+    <nav class="navLinks" id="links">
+      <a href="#home">होम</a>
+      <a href="#services">सेवाएँ</a>
+      <a href="#complaintSection">शिकायत</a>
+      <a href="#trackSection">Track</a>
+      <a href="#how">कैसे काम करता है</a>
+    </nav>
+
+    <a href="admin.html" class="adminLoginBtn">
+      <img src="logo2.png" alt="Admin">
+    </a>
+
+  </div>
+</header>
+
+
+<main>
+
+<section class="hero" id="home">
+
+  <div class="tag">🇮🇳 नागरिक सेवा • आपकी आवाज़</div>
+
+<h2>हर आवाज़ को मिले सम्मान</h2>
+
+  <p>
+    अपने क्षेत्र की सार्वजनिक समस्या को फोटो और स्थान की जानकारी के साथ दर्ज करें।
+    Complaint ID से उसकी स्थिति कभी भी देखें।
+  </p>
+
+  <div class="actions">
+    <button class="primary" onclick="openComplaint()">
+      📝 शिकायत दर्ज करें
+    </button>
+
+    <button class="secondary" onclick="track()">
+      🔎 शिकायत Track करें
+    </button>
+  </div>
+
+  <div class="trustRow">
+    <span>✓ Real-time record</span>
+    <span>✓ Complaint ID</span>
+    <span>✓ Status tracking</span>
+  </div>
+
+</section>
+
+
+<section class="container quick" id="trackSection">
+
+  <div class="title">
+    <h2>अपनी शिकायत खोजें</h2>
+    <p>Complaint ID डालकर वास्तविक status देखें</p>
+  </div>
+
+  <div class="trackBox">
+    <input
+      id="quickTrack"
+      type="text"
+      placeholder="जैसे LS20260918ABC123"
+    >
+
+    <button class="primary" onclick="quickTrack()">
+      Track Complaint
+    </button>
+  </div>
+
+  <div id="trackResult" class="trackResult"></div>
+
+</section>
+
+
+<section class="container" id="services">
+
+  <div class="title">
+    <h2>किस समस्या की शिकायत है?</h2>
+    <p>Category चुनें और form अपने आप तैयार हो जाएगा</p>
+  </div>
+
+  <div class="issueGrid">
+
+    <button class="issue" onclick="choose('सड़क')">
+      <div class="issueIcon">🛣️</div>
+      <h3>सड़क</h3>
+      <p>गड्ढे, टूटी सड़क, रास्ता</p>
+    </button>
+
+    <button class="issue" onclick="choose('नाला')">
+      <div class="issueIcon">🚰</div>
+      <h3>नाला</h3>
+      <p>जाम या गंदा नाला</p>
+    </button>
+
+    <button class="issue" onclick="choose('पानी')">
+      <div class="issueIcon">💧</div>
+      <h3>पानी</h3>
+      <p>जलापूर्ति या चापाकल</p>
+    </button>
+
+    <button class="issue" onclick="choose('स्ट्रीट लाइट')">
+      <div class="issueIcon">💡</div>
+      <h3>स्ट्रीट लाइट</h3>
+      <p>बंद या खराब लाइट</p>
+    </button>
+
+    <button class="issue" onclick="choose('सफाई')">
+      <div class="issueIcon">🧹</div>
+      <h3>सफाई</h3>
+      <p>कचरा और स्वच्छता</p>
+    </button>
+
+    <button class="issue" onclick="choose('अस्पताल')">
+      <div class="issueIcon">🏥</div>
+      <h3>अस्पताल</h3>
+      <p>सार्वजनिक स्वास्थ्य सुविधा</p>
+    </button>
+
+    <button class="issue" onclick="choose('पर्यावरण')">
+      <div class="issueIcon">🌱</div>
+      <h3>पर्यावरण</h3>
+      <p>पेड़, प्रदूषण, जलभराव</p>
+    </button>
+
+    <button class="issue" onclick="choose('अन्य')">
+      <div class="issueIcon">📌</div>
+      <h3>अन्य</h3>
+      <p>अन्य सार्वजनिक समस्या</p>
+    </button>
+
+  </div>
+
+
+  <!-- FIREBASE LIVE STATS -->
+
+  <div class="stats">
+
+    <div class="stat">
+      <b id="total">—</b>
+      <span>कुल शिकायतें</span>
+    </div>
+
+    <div class="stat">
+      <b id="solved">—</b>
+      <span>हल की गई</span>
+    </div>
+
+    <div class="stat">
+      <b id="pending">—</b>
+      <span>प्रक्रिया में</span>
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="container" id="complaintSection">
+
+  <div class="title">
+    <h2>📝 शिकायत दर्ज करें</h2>
+    <p>सही जानकारी देने से शिकायत पर कार्रवाई आसान होती है</p>
+  </div>
+
+  <div class="complaint">
+
+    <form id="form">
+
+      <div class="row">
+
+        <div class="field">
+          <label for="name">नाम</label>
+          <input
+            id="name"
+            type="text"
+            placeholder="आपका नाम"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="mobile">मोबाइल नंबर</label>
+          <input
+            id="mobile"
+            type="tel"
+            maxlength="10"
+            inputmode="numeric"
+            placeholder="10 अंकों का नंबर"
+            required
+          >
+        </div>
+
+      </div>
+
+
+      <div class="row">
+
+        <div class="field">
+
+          <label for="category">समस्या</label>
+
+          <select id="category" required>
+
+            <option value="">Category चुनें</option>
+            <option>सड़क</option>
+            <option>नाला</option>
+            <option>पानी</option>
+            <option>स्ट्रीट लाइट</option>
+            <option>सफाई</option>
+            <option>अस्पताल</option>
+            <option>पर्यावरण</option>
+            <option>स्कूल</option>
+            <option>अन्य</option>
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="pincode">PIN Code</label>
+
+          <input
+            id="pincode"
+            maxlength="6"
+            inputmode="numeric"
+            placeholder="6 अंकों का PIN"
+          >
+
+          <small id="pinStatus"></small>
+
+        </div>
+
+      </div>
+
+
+      <div class="row">
+
+        <div class="field">
+
+          <label for="state">राज्य</label>
+
+          <select id="state">
+
+            <option value="">राज्य चुनें</option>
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="district">जिला</label>
+
+          <select id="district">
+
+            <option value="">जिला चुनें</option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="location">पूरा स्थान / पता</label>
+
+        <input
+          id="location"
+          type="text"
+          placeholder="गाँव/वार्ड/मोहल्ला/लैंडमार्क"
+          required
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="description">समस्या का विवरण</label>
+
+        <textarea
+          id="description"
+          placeholder="समस्या कब से है और कहाँ है?"
+          required
+        ></textarea>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="photo">
+          📷 समस्या की फोटो (वैकल्पिक)
+        </label>
+
+        <div class="photo">
+          फोटो चुनें
+          <input
+            id="photo"
+            type="file"
+            accept="image/*"
+          >
+        </div>
+
+      </div>
+
+
+      <button
+        class="primary wide"
+        type="submit"
+        id="submitBtn"
+      >
+        🚀 शिकायत सबमिट करें
+      </button>
+
+    </form>
+
+
+    <div class="success" id="success">
+
+      ✅ शिकायत सफलतापूर्वक दर्ज हो गई!
+
+      <strong id="complaintID"></strong>
+
+      <button
+        class="copyBtn"
+        onclick="copyComplaintID()"
+      >
+        📋 Complaint ID Copy करें
+      </button>
+
+      <p>
+        इस ID को सुरक्षित रखें। इसी से Track किया जा सकेगा।
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="container" id="how">
+
+  <div class="title">
+
+    <h2>कैसे काम करता है?</h2>
+    <p>चार आसान चरण</p>
+
+  </div>
+
+
+  <div class="how">
+
+    <div class="step">
+      <div class="number">01</div>
+      <h3>समस्या बताएं</h3>
+      <p>Category, स्थान और विवरण भरें।</p>
+    </div>
+
+    <div class="step">
+      <div class="number">02</div>
+      <h3>सबूत जोड़ें</h3>
+      <p>जरूरत हो तो फोटो जोड़ें।</p>
+    </div>
+
+    <div class="step">
+      <div class="number">03</div>
+      <h3>Complaint ID पाएँ</h3>
+      <p>Submit होते ही unique ID मिलेगी।</p>
+    </div>
+
+    <div class="step">
+      <div class="number">04</div>
+      <h3>Track करें</h3>
+      <p>Admin status और reply अपडेट कर सकता है।</p>
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="container">
+
+  <div class="title">
+
+    <h2>लोक साथी की सुविधाएँ</h2>
+    <p>एक ही जगह पर नागरिक शिकायत workflow</p>
+
+  </div>
+
+
+  <div class="featureGrid">
+
+    <div class="feature">
+      <b>🔐 सुरक्षित रिकॉर्ड</b>
+      <p>Complaint data cloud database में रखा जाता है।</p>
+    </div>
+
+    <div class="feature">
+      <b>🆔 Unique ID</b>
+      <p>हर शिकायत के लिए अलग Complaint ID।</p>
+    </div>
+
+    <div class="feature">
+      <b>📊 Status Tracking</b>
+      <p>Pending, In Progress और Solved status।</p>
+    </div>
+
+    <div class="feature">
+      <b>💬 Admin Reply</b>
+      <p>Admin नागरिक के लिए जवाब दर्ज कर सकता है।</p>
+    </div>
+
+    <div class="feature">
+      <b>📍 Location Details</b>
+      <p>State, district, PIN और पूरा पता।</p>
+    </div>
+
+    <div class="feature">
+      <b>📱 Mobile Friendly</b>
+      <p>फोन और बड़े screen दोनों के लिए responsive।</p>
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+  <h2>लोक साथी</h2>
+
+  <p>आपकी आवाज़ • सेवा और समाधान की ओर</p>
+
+  <p>Citizen Problem Reporting Project • 2026</p>
+
+  <p class="footerName">Abhijeet</p>
+
+</footer>
+
+
+<!--
+====================================================
+FIREBASE LIVE COMPLAINT COUNT
+====================================================
+यह केवल INDEX PAGE के stats को Firebase से पढ़ता है।
+Admin.html को कोई बदलाव नहीं करता।
+====================================================
+-->
+
+<script type="module">
+
+  import { initializeApp } 
+    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+  import {
+    getFirestore,
+    collection,
+    getCountFromServer,
+    query,
+    where
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+
+  /*
+    IMPORTANT:
+
+    नीचे अपने ADMIN PAGE में इस्तेमाल होने वाला
+    SAME firebaseConfig डालना है।
+
+    नया Firebase project या नया database मत बनाना।
+  */
+
+  const firebaseConfig = {
+
+apiKey:"AIzaSyCzYRZEYqtmJV6XzwxyXezbAT_um0-UIRI",
+
+authDomain:"lok-sathi-782ec.firebaseapp.com",
+
+projectId:"lok-sathi-782ec",
+
+storageBucket:"lok-sathi-782ec.firebasestorage.app",
+
+messagingSenderId:"755213857958",
+
+appId:"1:755213857958:web:81a3566da61f3c1dbd7067",
+
+measurementId:"G-P79834851N"
+
+};
+
+
+
+  const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+
+async function loadComplaintStats() {
+
+  try {
+
+    const complaintsRef =
+      collection(db, "complaints");
+
+
+    /* कुल शिकायतें */
+
+    const totalSnap =
+      await getCountFromServer(complaintsRef);
+
+    document.getElementById("total").textContent =
+      totalSnap.data().count;
+
+
+    /* Solved शिकायतें */
+
+    const solvedQuery = query(
+      complaintsRef,
+      where("status", "==", "Solved")
+    );
+
+    const solvedSnap =
+      await getCountFromServer(solvedQuery);
+
+    document.getElementById("solved").textContent =
+      solvedSnap.data().count;
+
+
+    /* Pending + In Progress */
+
+    const pendingQuery = query(
+      complaintsRef,
+      where(
+        "status",
+        "in",
+        ["Pending", "In Progress"]
+      )
+    );
+
+    const pendingSnap =
+      await getCountFromServer(pendingQuery);
+
+    document.getElementById("pending").textContent =
+      pendingSnap.data().count;
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Firebase Complaint Stats Error:",
+      error
+    );
+
+    document.getElementById("total").textContent = "0";
+
+    document.getElementById("solved").textContent = "0";
+
+    document.getElementById("pending").textContent = "0";
+
+  }
+
+}
+
+
+loadComplaintStats();
+
+</script>
+
+
+<script type="module" src="script.js"></script>
+
+</body>
+</html>
